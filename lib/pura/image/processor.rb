@@ -37,8 +37,8 @@ module Pura
           return :tiff if bytes[0..3] == MAGIC_BYTES[:tiff_le] || bytes[0..3] == MAGIC_BYTES[:tiff_be]
           return :ico if bytes[0..3] == MAGIC_BYTES[:ico] || bytes[0..3] == MAGIC_BYTES[:cur]
 
-          if bytes[0..3] == MAGIC_BYTES[:webp] && bytes.length >= 12
-            return :webp if bytes[8..11] == [0x57, 0x45, 0x42, 0x50] # "WEBP"
+          if bytes[0..3] == MAGIC_BYTES[:webp] && bytes.length >= 12 && (bytes[8..11] == [0x57, 0x45, 0x42, 0x50])
+            return :webp # "WEBP"
           end
 
           raise ArgumentError, "Unsupported image format"
