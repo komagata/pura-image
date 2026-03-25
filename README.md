@@ -74,13 +74,13 @@ end
 
 ### Encode
 
-| Format | pura-* | Notes |
-|--------|--------|-------|
-| JPEG | 243 ms | |
-| PNG | 52 ms | |
-| BMP | 36 ms | |
-| GIF | 372 ms | Includes color quantization |
-| TIFF | 0.6 ms | Uncompressed |
+| Format | pura-* | ffmpeg (C) | vs ffmpeg |
+|--------|--------|------------|-----------|
+| JPEG | 238 ms | 62 ms | 3.8× |
+| PNG | 52 ms | 61 ms | **0.8× (faster!)** |
+| BMP | 35 ms | 58 ms | **0.6× (faster!)** |
+| GIF | 377 ms | 59 ms | 6.4× (includes color quantization) |
+| TIFF | 0.8 ms | 58 ms | **0.01× (73× faster!)** |
 
 ## Why pure Ruby?
 
