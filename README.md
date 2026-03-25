@@ -1,8 +1,6 @@
 # pura-image
 
-Pure Ruby image processing library. Bundles all **pura-*** format gems for unified image loading, saving, and conversion.
-
-Part of the **pura-*** series — pure Ruby image codec gems.
+Pure Ruby image processing library with **zero C extension dependencies**. Bundles all **pura-*** format gems and provides an `ImageProcessing` adapter for Rails Active Storage.
 
 ## Supported Formats
 
@@ -13,8 +11,10 @@ Part of the **pura-*** series — pure Ruby image codec gems.
 | BMP | ✅ | ✅ | [pura-bmp](https://github.com/komagata/pura-bmp) |
 | GIF | ✅ | ✅ | [pura-gif](https://github.com/komagata/pura-gif) |
 | TIFF | ✅ | ✅ | [pura-tiff](https://github.com/komagata/pura-tiff) |
-| ICO | ✅ | ✅ | [pura-ico](https://github.com/komagata/pura-ico) |
-| WebP | ✅ | ✅ (lossless) | [pura-webp](https://github.com/komagata/pura-webp) |
+| ICO/CUR | ✅ | ✅ | [pura-ico](https://github.com/komagata/pura-ico) |
+| WebP | ✅ | 🔜 | [pura-webp](https://github.com/komagata/pura-webp) |
+
+Format auto-detection by magic bytes — no extension guessing needed for decode.
 
 ## Installation
 
@@ -27,67 +27,133 @@ gem install pura-image
 ```ruby
 require "pura-image"
 
-# Load any supported format (auto-detected)
+# Load any format (auto-detected from magic bytes)
+image = Pura::Image.load("photo.jpg")
+image = Pura::Image.load("icon.webp")
+image.width   #=> 800
+image.height  #=> 600
+
+# Save to any format (detected from extension)
+Pura::Image.save(image, "output.png")
+
+# Convert between formats
+Pura::Image.convert("input.bmp", "output.jpg", quality: 85)
+Pura::Image.convert("photo.tiff", "photo.png")
+```
+
+## Image Operations
+
+All operations from the `image_processing` gem are supported:
+
+```ruby
 image = Pura::Image.load("photo.jpg")
 
 # Resize
-result = image.resize_to_fit(400, 400)
+image.resize_to_limit(800, 600)   # downsize only, keep aspect ratio
+image.resize_to_fit(400, 400)     # resize to fit, keep aspect ratio
+image.resize_to_fill(400, 400)    # fill exact size, center crop excess
+image.resize_and_pad(400, 400)    # fit within bounds, pad with black
+image.resize_to_cover(400, 400)   # cover bounds, no crop
 
-# Save to any format (auto-detected from extension)
-Pura::Image.save(result, "output.png")
+# Transform
+image.crop(10, 10, 200, 200)      # crop region
+image.rotate(90)                   # rotate 90/180/270 degrees
+image.grayscale                    # convert to grayscale
 
-# Convert between formats
-Pura::Image.convert("input.webp", "output.jpg")
+# Chain operations
+result = Pura::Image.load("photo.jpg")
+  .resize_to_limit(800, 600)
+  .rotate(90)
+  .grayscale
 
-# Check supported formats
-Pura::Image.supported_formats #=> [:jpeg, :png, :bmp, :gif, :tiff, :ico, :webp]
+Pura::Image.save(result, "thumb.jpg", quality: 80)
 ```
 
-### Active Storage Integration
+## Rails Active Storage Integration
+
+Drop-in replacement for libvips/ImageMagick:
 
 ```ruby
-# config/environments/production.rb
-config.active_storage.variant_processor = :pura
+# Gemfile
+gem "image_processing"
+gem "pura-image"
 
-# In your model
+# config/application.rb
+config.active_storage.variant_processor = :pura
+```
+
+Models and views stay exactly the same:
+
+```ruby
 class User < ApplicationRecord
   has_one_attached :avatar do |attachable|
-    attachable.variant :thumb, resize_to_fit: [100, 100]
+    attachable.variant :thumb, resize_to_limit: [200, 200]
   end
 end
 ```
 
-## Benchmark Summary
+```erb
+<%= image_tag user.avatar.variant(:thumb) %>
+```
 
-400×400 image, Ruby 4.0.2 + YJIT.
+No `brew install vips`. No `apt install imagemagick`. Just `gem install` and go.
+
+### ImageProcessing::Pura API
+
+```ruby
+require "image_processing/pura"
+
+# Same API as ImageProcessing::Vips
+processed = ImageProcessing::Pura
+  .source("photo.jpg")
+  .resize_to_limit(400, 400)
+  .convert("png")
+  .call(destination: "output.png")
+
+# Pipeline branching
+pipeline = ImageProcessing::Pura.source("photo.jpg")
+large  = pipeline.resize_to_limit(800, 800).call(destination: "large.jpg")
+medium = pipeline.resize_to_limit(500, 500).call(destination: "medium.jpg")
+small  = pipeline.resize_to_limit(300, 300).call(destination: "small.jpg")
+
+# Validation
+ImageProcessing::Pura.valid_image?("photo.jpg")  #=> true
+```
+
+## Benchmark
+
+400×400 image, Ruby 4.0.2 + YJIT vs ffmpeg (C + SIMD).
 
 ### Decode
 
-| Format | pura-* | ffmpeg (C) | vs ffmpeg |
-|--------|--------|------------|-----------|
-| JPEG | 304 ms | 55 ms | 5.5× |
-| PNG | 111 ms | 60 ms | 1.9× |
-| BMP | 39 ms | 59 ms | **0.7× (faster!)** |
-| GIF | 77 ms | 65 ms | **1.2×** |
-| TIFF | 14 ms | 59 ms | **0.2× (4× faster!)** |
-| WebP | 207 ms | 66 ms | 3.1× |
+| Format | pura-* | ffmpeg | vs ffmpeg |
+|--------|--------|--------|-----------|
+| TIFF | **14 ms** | 59 ms | 🚀 **4× faster** |
+| BMP | **39 ms** | 59 ms | 🚀 **1.5× faster** |
+| GIF | 77 ms | 65 ms | ~1× (comparable) |
+| PNG | 111 ms | 60 ms | 1.9× slower |
+| WebP | 207 ms | 66 ms | 3.1× slower |
+| JPEG | 304 ms | 55 ms | 5.5× slower |
 
 ### Encode
 
-| Format | pura-* | ffmpeg (C) | vs ffmpeg |
-|--------|--------|------------|-----------|
-| JPEG | 238 ms | 62 ms | 3.8× |
-| PNG | 52 ms | 61 ms | **0.8× (faster!)** |
-| BMP | 35 ms | 58 ms | **0.6× (faster!)** |
-| GIF | 377 ms | 59 ms | 6.4× (includes color quantization) |
-| TIFF | 0.8 ms | 58 ms | **0.01× (73× faster!)** |
+| Format | pura-* | ffmpeg | vs ffmpeg |
+|--------|--------|--------|-----------|
+| TIFF | **0.8 ms** | 58 ms | 🚀 **73× faster** |
+| BMP | **35 ms** | 58 ms | 🚀 **1.7× faster** |
+| PNG | **52 ms** | 61 ms | 🚀 **faster** |
+| JPEG | 238 ms | 62 ms | 3.8× slower |
+| GIF | 377 ms | 59 ms | 6.4× slower |
+
+5 out of 11 operations are **faster than C** (ffmpeg process-spawn overhead).
 
 ## Why pure Ruby?
 
-- **`gem install` and go** — no `brew install`, no `apt install`, no C compiler needed
-- **Works everywhere Ruby works** — CRuby, ruby.wasm, JRuby, TruffleRuby
-- **Perfect for dev/CI** — no ImageMagick or libvips setup
-- **Three formats beat ffmpeg** — BMP, GIF, and TIFF decode faster than C
+- **`gem install` and go** — no `brew install`, no `apt install`, no C compiler
+- **Works everywhere Ruby works** — CRuby, ruby.wasm, mruby, JRuby, TruffleRuby
+- **Edge/Wasm ready** — browsers (ruby.wasm), sandboxed environments, no system libraries needed
+- **Perfect for dev/CI** — no ImageMagick/libvips setup. `rails new` → image upload → it just works
+- **7 formats, 1 interface** — unified API across JPEG, PNG, BMP, GIF, TIFF, ICO, WebP
 
 ## License
 
