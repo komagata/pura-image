@@ -5,25 +5,38 @@ require "rails/railtie"
 module Pura
   module Image
     class Railtie < Rails::Railtie
-      initializer "pura_image.configure_active_storage" do
+      initializer "pura_image.set_variant_processor", before: "active_storage.configs" do |app|
+        app.config.active_storage.variant_processor = :pura
+      end
+
+      initializer "pura_image.patch_active_storage_variation" do
         ActiveSupport.on_load(:active_storage_blob) do
           require "image_processing/pura"
 
-          # Override Variation#transformer to use Pura
-          ActiveStorage::Variation.class_eval do
+          variation_patch = Module.new do
             private
 
             def transformer
-              @pura_transformer ||= begin
-                klass = Class.new(ActiveStorage::Transformers::ImageProcessingTransformer) do
-                  private
-                  def processor
-                    ImageProcessing::Pura
+              if ActiveStorage.variant_processor == :pura && ActiveStorage.variant_transformer.nil?
+                @pura_transformer ||= begin
+                  klass = Class.new(ActiveStorage::Transformers::ImageProcessingTransformer) do
+                    private
+
+                    def processor
+                      ImageProcessing::Pura
+                    end
                   end
+
+                  klass.new(transformations.except(:format))
                 end
-                klass.new(transformations.except(:format))
+              else
+                super
               end
             end
+          end
+
+          unless ActiveStorage::Variation.ancestors.include?(variation_patch)
+            ActiveStorage::Variation.prepend(variation_patch)
           end
         end
       end
