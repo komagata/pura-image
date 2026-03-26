@@ -15,6 +15,7 @@ end
 require_relative "pura/image/version"
 require_relative "pura/image/operations"
 require_relative "pura/image/processor"
+require_relative "pura/image/railtie" if defined?(Rails::Railtie)
 
 module Pura
   module Image
