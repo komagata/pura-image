@@ -12,7 +12,7 @@ Pure Ruby image processing library with **zero C extension dependencies**. Bundl
 | GIF | ✅ | ✅ | [pura-gif](https://github.com/komagata/pura-gif) |
 | TIFF | ✅ | ✅ | [pura-tiff](https://github.com/komagata/pura-tiff) |
 | ICO/CUR | ✅ | ✅ | [pura-ico](https://github.com/komagata/pura-ico) |
-| WebP | ✅ | 🔜 | [pura-webp](https://github.com/komagata/pura-webp) |
+| WebP | ✅ | ✅ | [pura-webp](https://github.com/komagata/pura-webp) |
 
 Format auto-detection by magic bytes — no extension guessing needed for decode.
 
