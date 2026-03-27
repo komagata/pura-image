@@ -26,8 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "pura-gif", "~> 0.1"
   spec.add_dependency "pura-tiff", "~> 0.1"
   spec.add_dependency "pura-ico", "~> 0.1"
-
-  spec.add_development_dependency "image_processing", "~> 1.2"
+  spec.add_dependency "image_processing", "~> 1.2"
   spec.add_development_dependency "minitest", "~> 5.0"
   spec.add_development_dependency "rake", "~> 13.0"
 end
