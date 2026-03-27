@@ -19,7 +19,7 @@ module Pura
       end
 
       def grayscale
-        new_pixels = String.new(encoding: Encoding::BINARY, capacity: @pixels.bytesize)
+        new_pixels = String.new(encoding: Encoding::BINARY)
         i = 0
         size = @pixels.bytesize
         while i < size
@@ -98,7 +98,7 @@ module Pura
       def rotate90
         new_w = @height
         new_h = @width
-        new_pixels = String.new(encoding: Encoding::BINARY, capacity: new_w * new_h * 3)
+        new_pixels = String.new(encoding: Encoding::BINARY)
 
         new_h.times do |y|
           new_w.times do |x|
@@ -111,7 +111,7 @@ module Pura
       end
 
       def rotate180
-        new_pixels = String.new(encoding: Encoding::BINARY, capacity: @pixels.bytesize)
+        new_pixels = String.new(encoding: Encoding::BINARY)
         (@height - 1).downto(0) do |y|
           (@width - 1).downto(0) do |x|
             offset = ((y * @width) + x) * 3
@@ -124,7 +124,7 @@ module Pura
       def rotate270
         new_w = @height
         new_h = @width
-        new_pixels = String.new(encoding: Encoding::BINARY, capacity: new_w * new_h * 3)
+        new_pixels = String.new(encoding: Encoding::BINARY)
 
         new_h.times do |y|
           new_w.times do |x|
