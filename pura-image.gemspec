@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
 
-  spec.files = Dir["lib/**/*.rb"] + ["pura-image.gemspec", "Gemfile", "Rakefile", "README.md", "LICENSE"]
+  spec.files = Dir["lib/**/*.rb"] + ["test/fixtures/test_64x64.jpg"] + ["pura-image.gemspec", "Gemfile", "Rakefile", "README.md", "LICENSE"]
 
   spec.add_dependency "pura-jpeg", "~> 0.1"
   spec.add_dependency "pura-png", "~> 0.1"
