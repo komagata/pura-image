@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
-require "rails/railtie"
+begin
+  require "rails/railtie"
+rescue LoadError
+  # Rails is not available, skip railtie functionality
+  return
+end
 
 module Pura
   module Image
