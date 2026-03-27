@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     pura-image (0.2.2)
+      image_processing (~> 1.2)
       pura-bmp (~> 0.1)
       pura-gif (~> 0.1)
       pura-ico (~> 0.1)
@@ -67,7 +68,6 @@ PLATFORMS
   x86_64-darwin-25
 
 DEPENDENCIES
-  image_processing (~> 1.2)
   minitest (~> 5.0)
   pura-image!
   rake (~> 13.0)
