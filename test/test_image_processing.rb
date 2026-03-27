@@ -3,8 +3,6 @@
 require "minitest/autorun"
 
 $LOAD_PATH.unshift(File.join(__dir__, "..", "lib"))
-$LOAD_PATH.unshift("/tmp/pura-jpeg/lib")
-$LOAD_PATH.unshift("/tmp/pura-png/lib")
 
 require "image_processing/pura"
 
