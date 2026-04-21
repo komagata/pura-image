@@ -2,6 +2,33 @@
 
 Pure Ruby image processing library with **zero C extension dependencies**. Bundles all **pura-*** format gems and provides an `ImageProcessing` adapter for Rails Active Storage.
 
+## Why this exists (in 30 seconds)
+
+Stop installing system libraries just to resize an image in Rails.
+
+```diff
+# Gemfile
+  gem "image_processing"
++ gem "pura-image"
+```
+
+```ruby
+# config/application.rb
+config.active_storage.variant_processor = :pura
+```
+
+```diff
+# Dockerfile
+- RUN apt-get install -y libvips-dev imagemagick
+```
+
+That's it. No `brew install vips`. No `apt install imagemagick`. No C compiler. Works on macOS, Linux, Windows, Docker, CI, ruby.wasm — anywhere Ruby runs.
+
+- ✅ **Drop-in** for `ImageProcessing::Vips` / `ImageProcessing::MiniMagick`
+- ✅ **7 formats** — JPEG, PNG, BMP, GIF, TIFF, ICO/CUR, WebP
+- ✅ **Some operations are faster than C** (no process-spawn overhead — see [Benchmark](#benchmark))
+- ✅ **Runs on ruby.wasm, JRuby, TruffleRuby**
+
 ## Supported Formats
 
 | Format | Decode | Encode | Gem |
