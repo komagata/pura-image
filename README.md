@@ -25,7 +25,7 @@ config.active_storage.variant_processor = :pura
 That's it. No `brew install vips`. No `apt install imagemagick`. No C compiler. Works on macOS, Linux, Windows, Docker, CI, ruby.wasm — anywhere Ruby runs.
 
 - ✅ **Drop-in** for `ImageProcessing::Vips` / `ImageProcessing::MiniMagick`
-- ✅ **6 formats** — JPEG, PNG, BMP, GIF, TIFF, ICO/CUR
+- ✅ **7 formats** — JPEG, PNG, BMP, GIF, TIFF, ICO/CUR, WebP
 - ✅ **Some operations are faster than C** (no process-spawn overhead — see [Benchmark](#benchmark))
 - ✅ **Runs on ruby.wasm, JRuby, TruffleRuby**
 
@@ -39,7 +39,7 @@ That's it. No `brew install vips`. No `apt install imagemagick`. No C compiler. 
 | GIF | ✅ | ✅ | [pura-gif](https://github.com/komagata/pura-gif) |
 | TIFF | ✅ | ✅ | [pura-tiff](https://github.com/komagata/pura-tiff) |
 | ICO/CUR | ✅ | ✅ | [pura-ico](https://github.com/komagata/pura-ico) |
-| WebP | 🚧 | 🚧 | [pura-webp](https://github.com/komagata/pura-webp) — VP8 decoder rewrite in progress; temporarily disabled |
+| WebP | ✅ | ✅ | [pura-webp](https://github.com/komagata/pura-webp) |
 
 Format auto-detection by magic bytes — no extension guessing needed for decode.
 
@@ -179,7 +179,7 @@ ImageProcessing::Pura.valid_image?("photo.jpg")  #=> true
 - **Works everywhere Ruby works** — CRuby, ruby.wasm, mruby, JRuby, TruffleRuby
 - **Edge/Wasm ready** — browsers (ruby.wasm), sandboxed environments, no system libraries needed
 - **Perfect for dev/CI** — no ImageMagick/libvips setup. `rails new` → image upload → it just works
-- **6 formats, 1 interface** — unified API across JPEG, PNG, BMP, GIF, TIFF, ICO (WebP in progress)
+- **7 formats, 1 interface** — unified API across JPEG, PNG, BMP, GIF, TIFF, ICO, WebP
 
 ## License
 

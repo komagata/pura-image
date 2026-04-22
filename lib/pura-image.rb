@@ -6,6 +6,11 @@ require "pura-bmp"
 require "pura-gif"
 require "pura-tiff"
 require "pura-ico"
+begin
+  require "pura-webp"
+rescue LoadError
+  # pura-webp is optional — install the gem to enable WebP support.
+end
 
 require_relative "pura/image/version"
 require_relative "pura/image/operations"
@@ -32,7 +37,9 @@ module Pura
       end
 
       def supported_formats
-        %i[jpeg png bmp gif tiff ico]
+        formats = %i[jpeg png bmp gif tiff ico]
+        formats << :webp if defined?(Pura::Webp)
+        formats
       end
     end
   end

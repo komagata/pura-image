@@ -86,9 +86,9 @@ module Pura
           when :tiff then Pura::Tiff.decode(path)
           when :ico  then Pura::Ico.decode(path)
           when :webp
-            raise NotImplementedError,
-                  "WebP decoding is temporarily disabled while pura-webp's VP8 decoder is rewritten. " \
-                  "Track progress at https://github.com/komagata/pura-webp"
+            raise ArgumentError, "WebP support requires the pura-webp gem" unless defined?(Pura::Webp)
+
+            Pura::Webp.decode(path)
           else
             raise ArgumentError, "Unsupported format: #{format}"
           end
@@ -114,9 +114,10 @@ module Pura
             ico_img = Pura::Ico::Image.new(image.width, image.height, image.pixels)
             Pura::Ico.encode(ico_img, path)
           when :webp
-            raise NotImplementedError,
-                  "WebP encoding is temporarily disabled while pura-webp's VP8 decoder is rewritten. " \
-                  "Track progress at https://github.com/komagata/pura-webp"
+            raise ArgumentError, "WebP support requires the pura-webp gem" unless defined?(Pura::Webp)
+
+            webp_img = Pura::Webp::Image.new(image.width, image.height, image.pixels)
+            Pura::Webp.encode(webp_img, path, **options)
           else
             raise ArgumentError, "Unsupported output format: #{format}"
           end
