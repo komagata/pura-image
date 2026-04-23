@@ -97,24 +97,7 @@ function createTile(preset) {
       <summary>Ruby</summary>
       <pre class="tile-code"><code>${highlightRuby(preset.code.trim())}</code></pre>
     </details>
-    <details class="tile-details">
-      <summary>Rails variant</summary>
-      <pre><code>${escapeHtml(preset.railsSnippet)}</code></pre>
-      <button type="button" data-role="copy-rails">Copy</button>
-    </details>
   `;
-
-  tile.querySelector("[data-role=copy-rails]").addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(preset.railsSnippet);
-      const btn = tile.querySelector("[data-role=copy-rails]");
-      btn.textContent = "Copied!";
-      setTimeout(() => (btn.textContent = "Copy"), 1200);
-    } catch (err) {
-      logLine(`Clipboard error: ${err.message}`, "err");
-    }
-  });
-
   return tile;
 }
 

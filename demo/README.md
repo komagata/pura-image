@@ -1,10 +1,8 @@
 # pura-image Playground (ruby.wasm demo)
 
-A single-page demo that runs **`ImageProcessing::Pura` Ruby code directly in the browser** via ruby.wasm. Land on the page and you see the full spread at a glance: an auto-generated 400x300 gradient input image (produced by pura-image itself — no bundled binaries) and all six preset variants already executed on it. Drop your own image to re-run everything with it.
+A single-page demo that runs **pura-image directly in the browser** via ruby.wasm. Land on the page and you see the full spread at a glance: an auto-generated 400x300 gradient input image (produced by pura-image itself — no bundled binaries) and all six preset transformations already executed on it. Drop your own image to re-run everything with it.
 
-**What's actually running:** only the pure-Ruby `ImageProcessing::Pura` library that Rails Active Storage would delegate variant generation to on the server — no libvips / ImageMagick install required.
-
-**Not running here:** Rails itself, Active Storage, a database, or any HTTP stack. Each tile shows the matching `attachable.variant :...` snippet so the connection to your Rails model stays explicit, but the snippet is a copy-paste reference, not something this page interprets.
+What's running is the `ImageProcessing::Pura` chainable API plus the pura-* format gems — no libvips, no ImageMagick, no C extensions.
 
 ## Why this demo exists
 
@@ -71,7 +69,7 @@ Key files:
 
 - [`src/ruby-runtime.js`](./src/ruby-runtime.js) — WASI FS bridge + RubyVM boot
 - [`src/main.js`](./src/main.js) — grid rendering + runAllPresets orchestration + Ruby-side sample image generation
-- [`src/presets.js`](./src/presets.js) — the 6 preset snippets (resize, convert, rotate+grayscale, TIFF encode, ICO favicon, WebP)
+- [`src/presets.js`](./src/presets.js) — the 6 preset snippets (resize, format convert, rotate+grayscale, TIFF encode, ICO favicon, WebP)
 - [`build/Gemfile`](./build/Gemfile) — which gems go into the wasm
 
 ## Deployment
