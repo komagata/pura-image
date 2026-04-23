@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "image_processing"
+require "pura/processing"
 
 require_relative "../pura-image"
 
 module ImageProcessing
   module Pura
-    extend Chainable
+    extend ::Pura::Processing::Chainable
 
     def self.valid_image?(file)
       path = file.respond_to?(:path) ? file.path : file.to_s
@@ -20,7 +20,7 @@ module ImageProcessing
       false
     end
 
-    class Processor < ImageProcessing::Processor
+    class Processor < ::Pura::Processing::Processor
       accumulator :image, ::Pura::Image::Wrapper
 
       def self.supports_resize_on_load?
@@ -35,7 +35,7 @@ module ImageProcessing
         elsif path_or_image.respond_to?(:path)
           ::Pura::Image::Processor.load(path_or_image.path)
         else
-          raise ImageProcessing::Error, "unsupported source: #{path_or_image.inspect}"
+          raise ::Pura::Processing::Error, "unsupported source: #{path_or_image.inspect}"
         end
       end
 

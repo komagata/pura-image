@@ -8,7 +8,6 @@ Stop installing system libraries just to resize an image in Rails.
 
 ```diff
 # Gemfile
-  gem "image_processing"
 + gem "pura-image"
 ```
 
@@ -102,7 +101,6 @@ Drop-in replacement for libvips/ImageMagick:
 
 ```ruby
 # Gemfile
-gem "image_processing"
 gem "pura-image"
 
 # config/application.rb
