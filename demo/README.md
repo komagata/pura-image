@@ -9,7 +9,7 @@ What's running is the `ImageProcessing::Pura` chainable API plus the pura-* form
 Browser JavaScript can resize and crop images with Canvas, but it cannot run `ImageProcessing::Pura.source(...).resize_to_limit(...).convert(...).call` — that chain only exists in the Ruby ecosystem. This demo exists to demonstrate:
 
 1. pura-image's "zero dependency" claim is real enough to survive in a wasm sandbox
-2. The exact Ruby code your Rails production server runs, runs in the browser unchanged
+2. `ImageProcessing::Pura` chains run identically here as anywhere else Ruby runs — no browser-specific branches
 3. Formats that pure-JS cannot easily encode (TIFF, ICO) become trivial in Ruby
 
 ## Local development
