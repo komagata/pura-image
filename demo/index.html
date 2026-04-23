@@ -3,18 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pura-image Playground — Rails Active Storage in Your Browser</title>
-    <meta name="description" content="Every ImageProcessing::Pura variant, running in your browser tab via ruby.wasm. No server, no upload." />
+    <title>pura-image Playground — ImageProcessing::Pura in your browser</title>
+    <meta name="description" content="Run ImageProcessing::Pura — the pure-Ruby library Rails Active Storage delegates image variants to — directly in your browser via ruby.wasm. No server, no upload. Rails itself is not running here." />
     <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
     <header class="app-header">
       <h1>pura-image Playground</h1>
       <p class="tagline">
-        The exact Ruby code your Rails server runs &mdash;
-        <strong>running in this browser tab, not on a server.</strong>
+        <code>ImageProcessing::Pura</code> &mdash; the pure-Ruby library
+        Rails Active Storage delegates image variants to &mdash;
+        <strong>running directly in this browser tab via ruby.wasm.</strong>
       </p>
       <p class="disclosure">
+        Only the image processing library runs here. Rails itself is not running in the browser.
         Your image never leaves this page. First load fetches a ~47 MB ruby.wasm binary (a few seconds).
       </p>
     </header>

@@ -46,9 +46,9 @@ Format auto-detection by magic bytes — no extension guessing needed for decode
 
 ## Try it in your browser
 
-The [Rails Active Storage Playground](./demo) runs the exact `ImageProcessing::Pura` chain you would put in your Rails model — in your browser tab, via ruby.wasm. Drop an image, edit the Ruby code, hit Run. Your image never leaves the page.
+The [demo page](https://komagata.github.io/pura-image/) runs `ImageProcessing::Pura` — the pure-Ruby library Rails Active Storage delegates variant generation to — directly in your browser via ruby.wasm. Drop any image and six preset variants (resize, format convert, rotate + grayscale, TIFF, ICO favicon, WebP) run client-side; your bytes never leave the tab. **Rails itself is not running in the browser** — only the image processing library that a Rails server would call server-side.
 
-Bonus: two formats that browser JavaScript cannot encode natively — **TIFF** and **ICO** — are a one-liner in pura-image. See [demo/README.md](./demo/README.md) for local setup, or visit the deployed page (link in the repo's Pages settings).
+Bonus: two formats that browser JavaScript cannot encode natively — **TIFF** and **ICO** — are a one-liner in pura-image. See [demo/README.md](./demo/README.md) for local setup.
 
 ## Installation
 

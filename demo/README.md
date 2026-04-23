@@ -1,8 +1,10 @@
 # pura-image Playground (ruby.wasm demo)
 
-A single-page demo that runs **`ImageProcessing::Pura` Ruby code directly in the browser** via ruby.wasm. Land on the page and you see the full spread at a glance: an auto-generated 400x300 gradient input image (produced by pura-image itself — no bundled binaries) and all six `ImageProcessing::Pura` variant presets already executed on it. Drop your own image to re-run everything with it.
+A single-page demo that runs **`ImageProcessing::Pura` Ruby code directly in the browser** via ruby.wasm. Land on the page and you see the full spread at a glance: an auto-generated 400x300 gradient input image (produced by pura-image itself — no bundled binaries) and all six preset variants already executed on it. Drop your own image to re-run everything with it.
 
-The exact code you would put in your Rails Active Storage variant definition executes on the user's device — no server, no upload, no libvips / ImageMagick install.
+**What's actually running:** only the pure-Ruby `ImageProcessing::Pura` library that Rails Active Storage would delegate variant generation to on the server — no libvips / ImageMagick install required.
+
+**Not running here:** Rails itself, Active Storage, a database, or any HTTP stack. Each tile shows the matching `attachable.variant :...` snippet so the connection to your Rails model stays explicit, but the snippet is a copy-paste reference, not something this page interprets.
 
 ## Why this demo exists
 
