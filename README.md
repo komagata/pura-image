@@ -26,7 +26,7 @@ That's it. No `brew install vips`. No `apt install imagemagick`. No C compiler. 
 - ✅ **Drop-in** for `ImageProcessing::Vips` / `ImageProcessing::MiniMagick`
 - ✅ **7 formats** — JPEG, PNG, BMP, GIF, TIFF, ICO/CUR, WebP
 - ✅ **Some operations are faster than C** (no process-spawn overhead — see [Benchmark](#benchmark))
-- ✅ **Runs on ruby.wasm, JRuby, TruffleRuby**
+- ✅ **Runs on ruby.wasm, JRuby, TruffleRuby** — [try it in your browser](./demo) (no server, no upload)
 
 ## Supported Formats
 
@@ -41,6 +41,12 @@ That's it. No `brew install vips`. No `apt install imagemagick`. No C compiler. 
 | WebP | ✅ | ✅ | [pura-webp](https://github.com/komagata/pura-webp) |
 
 Format auto-detection by magic bytes — no extension guessing needed for decode.
+
+## Try it in your browser
+
+The [Rails Active Storage Playground](./demo) runs the exact `ImageProcessing::Pura` chain you would put in your Rails model — in your browser tab, via ruby.wasm. Drop an image, edit the Ruby code, hit Run. Your image never leaves the page.
+
+Bonus: two formats that browser JavaScript cannot encode natively — **TIFF** and **ICO** — are a one-liner in pura-image. See [demo/README.md](./demo/README.md) for local setup, or visit the deployed page (link in the repo's Pages settings).
 
 ## Installation
 

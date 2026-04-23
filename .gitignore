@@ -1,1 +1,10 @@
 .claude/
+.serena/
+
+# Demo artifacts and caches
+demo/node_modules/
+demo/dist/
+demo/build/build/
+demo/build/rubies/
+demo/build/vendor/
+demo/public/ruby.wasm
