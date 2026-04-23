@@ -15,7 +15,7 @@ class ImageProcessingPuraTest < Minitest::Test
   FIXTURE = File.expand_path("fixtures/test_64x64.jpg", __dir__)
 
   def test_base_classes_come_from_pura_processing_not_image_processing_gem
-    assert_equal ::Pura::Processing::Chainable, ImageProcessing::Pura.singleton_class.ancestors.find { |a| a.name == "Pura::Processing::Chainable" }
+    assert_includes ImageProcessing::Pura.singleton_class.ancestors, ::Pura::Processing::Chainable
     assert_operator ImageProcessing::Pura::Processor, :<, ::Pura::Processing::Processor
   end
 
