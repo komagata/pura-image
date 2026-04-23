@@ -1,9 +1,4 @@
 PATH
-  remote: ../../../../pura-processing
-  specs:
-    pura-processing (0.1.0)
-
-PATH
   remote: .
   specs:
     pura-image (0.3.0)
@@ -34,6 +29,7 @@ GEM
     pura-ico (0.1.0)
     pura-jpeg (0.1.0)
     pura-png (0.1.0)
+    pura-processing (0.1.0)
     pura-tiff (0.1.0)
     pura-webp (0.2.0)
     racc (1.8.1)
@@ -66,7 +62,6 @@ PLATFORMS
 DEPENDENCIES
   minitest (~> 5.0)
   pura-image!
-  pura-processing!
   rake (~> 13.0)
   rubocop
 
