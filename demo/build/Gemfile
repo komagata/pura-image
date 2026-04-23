@@ -1,0 +1,16 @@
+source "https://rubygems.org"
+
+# Gems to bundle INTO the wasm binary for browser execution.
+gem "pura-image", "~> 0.3"
+
+# Presence of the `js` gem tells rbwasm to build a reactor-style wasm
+# (with the Ruby ABI exports that @ruby/wasm-wasi's RubyVM expects).
+# Without it, rbwasm produces a command-style wasm and RubyVM.setInstance
+# fails with "FinalizationRegistry: cleanup must be callable".
+gem "js"
+
+group :build do
+  # Only used on the build host to produce demo/public/ruby.wasm.
+  # Provides the `rbwasm` CLI.
+  gem "ruby_wasm", "~> 2.9"
+end

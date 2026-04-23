@@ -1,0 +1,53 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    js (2.9.4)
+    logger (1.7.0)
+    pura-bmp (0.1.0)
+    pura-gif (0.1.0)
+    pura-ico (0.1.0)
+    pura-image (0.3.0)
+      pura-bmp (~> 0.1)
+      pura-gif (~> 0.1)
+      pura-ico (~> 0.1)
+      pura-jpeg (~> 0.1)
+      pura-png (~> 0.1)
+      pura-processing (~> 0.1)
+      pura-tiff (~> 0.1)
+      pura-webp (~> 0.2)
+    pura-jpeg (0.1.0)
+    pura-png (0.1.0)
+    pura-processing (0.1.0)
+    pura-tiff (0.1.0)
+    pura-webp (0.2.0)
+    ruby_wasm (2.9.4)
+      logger
+    ruby_wasm (2.9.4-aarch64-linux)
+      logger
+    ruby_wasm (2.9.4-aarch64-linux-musl)
+      logger
+    ruby_wasm (2.9.4-arm64-darwin)
+      logger
+    ruby_wasm (2.9.4-x86_64-darwin)
+      logger
+    ruby_wasm (2.9.4-x86_64-linux)
+      logger
+    ruby_wasm (2.9.4-x86_64-linux-musl)
+      logger
+
+PLATFORMS
+  aarch64-linux
+  aarch64-linux-musl
+  arm64-darwin
+  ruby
+  x86_64-darwin
+  x86_64-linux
+  x86_64-linux-musl
+
+DEPENDENCIES
+  js
+  pura-image (~> 0.3)
+  ruby_wasm (~> 2.9)
+
+BUNDLED WITH
+   2.7.2

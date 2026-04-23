@@ -1,0 +1,20 @@
+{
+  "name": "pura-image-demo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Rails Active Storage Playground — pura-image running in the browser via ruby.wasm.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:wasm": "cd build && bundle install && bundle exec rbwasm build --ruby-version 3.4 -o ../public/ruby.wasm"
+  },
+  "dependencies": {
+    "@ruby/wasm-wasi": "^2.7.1",
+    "@bjorn3/browser_wasi_shim": "^0.3.0"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
+  }
+}
