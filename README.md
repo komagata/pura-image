@@ -28,6 +28,8 @@ That's it. No `brew install vips`. No `apt install imagemagick`. No C compiler. 
 - ✅ **Some operations are faster than C** (no process-spawn overhead — see [Benchmark](#benchmark))
 - ✅ **Runs on ruby.wasm, JRuby, TruffleRuby**
 
+Under the hood, pura-image depends on [pura-processing](https://github.com/komagata/pura-processing) for the `Chainable` / `Pipeline` layer (extracted from `image_processing`, MIT © Janko Marohnić) and on the format-specific pura-jpeg / pura-png / pura-bmp / pura-gif / pura-tiff / pura-ico / pura-webp gems for the actual encode/decode paths — all pure Ruby, none requiring a C compiler.
+
 ## Supported Formats
 
 | Format | Decode | Encode | Gem |
