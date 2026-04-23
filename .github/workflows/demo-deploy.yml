@@ -37,7 +37,9 @@ jobs:
 
       - name: Build ruby.wasm (bundles pura-* gems)
         working-directory: demo/build
-        run: bundle exec rbwasm build --ruby-version 3.4 -o ../public/ruby.wasm
+        run: |
+          mkdir -p ../public
+          bundle exec rbwasm build --ruby-version 3.4 -o ../public/ruby.wasm
 
       - name: Install npm dependencies
         working-directory: demo
