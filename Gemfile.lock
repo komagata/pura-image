@@ -15,6 +15,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.3)
+    erb (6.0.7)
     json (2.19.4)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
@@ -60,6 +61,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  erb
   minitest (~> 5.0)
   pura-image!
   rake (~> 13.0)

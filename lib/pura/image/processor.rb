@@ -22,8 +22,7 @@ module Pura
         ".gif" => :gif,
         ".tif" => :tiff, ".tiff" => :tiff,
         ".webp" => :webp,
-        ".ico" => :ico,
-        ".cur" => :ico
+        ".ico" => :ico
       }.freeze
 
       class << self
@@ -97,22 +96,22 @@ module Pura
         def encode_with_format(image, path, format, **options)
           case format
           when :jpeg
-            Pura::Jpeg.encode(image, path, quality: options.fetch(:quality, 85))
+            Pura::Jpeg.encode(image, path, **options)
           when :png
             png_img = Pura::Png::Image.new(image.width, image.height, image.pixels)
-            Pura::Png.encode(png_img, path, compression: options.fetch(:compression, 6))
+            Pura::Png.encode(png_img, path, **options)
           when :bmp
             bmp_img = Pura::Bmp::Image.new(image.width, image.height, image.pixels)
-            Pura::Bmp.encode(bmp_img, path)
+            Pura::Bmp.encode(bmp_img, path, **options)
           when :gif
             gif_img = Pura::Gif::Image.new(image.width, image.height, image.pixels)
-            Pura::Gif.encode(gif_img, path)
+            Pura::Gif.encode(gif_img, path, **options)
           when :tiff
             tiff_img = Pura::Tiff::Image.new(image.width, image.height, image.pixels)
-            Pura::Tiff.encode(tiff_img, path)
+            Pura::Tiff.encode(tiff_img, path, **options)
           when :ico
             ico_img = Pura::Ico::Image.new(image.width, image.height, image.pixels)
-            Pura::Ico.encode(ico_img, path)
+            Pura::Ico.encode(ico_img, path, **options)
           when :webp
             raise ArgumentError, "WebP support requires the pura-webp gem" unless defined?(Pura::Webp)
 

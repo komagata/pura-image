@@ -38,3 +38,23 @@ jobs:
         run: bundle install
       - name: Run tests with YJIT
         run: RUBY_YJIT_ENABLE=1 bundle exec rake test
+
+  active-storage:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        rails-version: ['~> 7.2.0', '~> 8.0.0', '~> 8.1.0']
+        eager-load: ['0', '1']
+    env:
+      BUNDLE_GEMFILE: gemfiles/rails.gemfile
+      RAILS_VERSION: ${{ matrix.rails-version }}
+      EAGER_LOAD: ${{ matrix.eager-load }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+      - run: bundle install
+      - run: bundle exec ruby -Ilib test/integration/active_storage.rb pura
+      - run: bundle exec ruby -Ilib test/integration/active_storage.rb disabled

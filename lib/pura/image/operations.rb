@@ -34,19 +34,14 @@ module Pura
       end
 
       def resize_to_limit(max_width, max_height)
-        return dup_image if @width <= max_width && @height <= max_height
+        scale = fit_scale(max_width, max_height)
+        return dup_image if scale >= 1
 
-        scale = [@width.to_f / max_width, @height.to_f / max_height].max
-        new_w = [(@width / scale).round, 1].max
-        new_h = [(@height / scale).round, 1].max
-        resize(new_w, new_h)
+        resize_scaled(scale)
       end
 
       def resize_to_fit(max_width, max_height)
-        scale = [@width.to_f / max_width, @height.to_f / max_height].max
-        new_w = [(@width / scale).round, 1].max
-        new_h = [(@height / scale).round, 1].max
-        resize(new_w, new_h)
+        resize_scaled(fit_scale(max_width, max_height))
       end
 
       def resize_to_fill(fill_width, fill_height)
@@ -90,6 +85,22 @@ module Pura
       end
 
       private
+
+      def fit_scale(max_width, max_height)
+        dimensions = [max_width, max_height].compact
+        unless dimensions.any? && dimensions.all? { |value| value.is_a?(Integer) && value.positive? }
+          raise ArgumentError, "provide at least one positive integer dimension"
+        end
+
+        scales = []
+        scales << (max_width.to_f / @width) if max_width
+        scales << (max_height.to_f / @height) if max_height
+        scales.min
+      end
+
+      def resize_scaled(scale)
+        resize([(@width * scale).round, 1].max, [(@height * scale).round, 1].max)
+      end
 
       def dup_image
         self.class.new(@width, @height, @pixels.dup)
