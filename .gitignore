@@ -8,3 +8,6 @@ demo/build/build/
 demo/build/rubies/
 demo/build/vendor/
 demo/public/ruby.wasm
+
+# Each integration matrix entry resolves its own dependencies.
+gemfiles/*.lock

@@ -42,10 +42,12 @@ jobs:
   active-storage:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         rails-version: ['~> 7.2.0', '~> 8.0.0', '~> 8.1.0']
         eager-load: ['0', '1']
     env:
+      BUNDLE_GEMFILE: gemfiles/rails.gemfile
       RAILS_VERSION: ${{ matrix.rails-version }}
       EAGER_LOAD: ${{ matrix.eager-load }}
     steps:

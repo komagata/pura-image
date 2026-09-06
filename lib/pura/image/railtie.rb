@@ -9,7 +9,16 @@ module Pura
         app.config.after_initialize do
           if defined?(ActiveStorage) && ActiveStorage.variant_processor == :pura
             require_relative "transformer"
-            ActiveStorage.variant_transformer = Pura::Image::Transformer
+            if ActiveStorage.respond_to?(:variant_transformer=)
+              ActiveStorage.variant_transformer = Pura::Image::Transformer
+            else
+              require_relative "legacy_variation"
+              ActiveSupport.on_load(:active_storage_blob) do
+                unless ActiveStorage::Variation < Pura::Image::LegacyVariation
+                  ActiveStorage::Variation.prepend(Pura::Image::LegacyVariation)
+                end
+              end
+            end
           end
         end
       end
