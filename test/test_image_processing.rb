@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "minitest/autorun"
+require "tmpdir"
+require "fileutils"
 
 $LOAD_PATH.unshift(File.join(__dir__, "..", "lib"))
 
@@ -8,6 +10,7 @@ require "image_processing/pura"
 
 class TestImageProcessingPure < Minitest::Test
   def setup
+    @tmpdir = Dir.mktmpdir("pura-pipeline-test")
     # Create a 100x80 test JPEG
     pixels = String.new(encoding: Encoding::BINARY)
     80.times do |y|
@@ -15,18 +18,22 @@ class TestImageProcessingPure < Minitest::Test
         pixels << (x * 255 / 100).chr << (y * 255 / 80).chr << 128.chr
       end
     end
-    @jpeg_path = "/tmp/ip_test_src.jpg"
+    @jpeg_path = "#{@tmpdir}/ip_test_src.jpg"
     img = Pura::Jpeg::Image.new(100, 80, pixels)
     Pura::Jpeg.encode(img, @jpeg_path, quality: 90)
 
     # Create a test PNG
-    @png_path = "/tmp/ip_test_src.png"
+    @png_path = "#{@tmpdir}/ip_test_src.png"
     png_img = Pura::Png::Image.new(100, 80, pixels)
     Pura::Png.encode(png_img, @png_path)
   end
 
+  def teardown
+    FileUtils.remove_entry(@tmpdir)
+  end
+
   def test_resize_to_limit
-    dest = "/tmp/ip_test_limit.jpg"
+    dest = "#{@tmpdir}/ip_test_limit.jpg"
     ImageProcessing::Pura
       .source(@jpeg_path)
       .resize_to_limit(50, 50)
@@ -38,7 +45,7 @@ class TestImageProcessingPure < Minitest::Test
   end
 
   def test_resize_to_limit_no_upscale
-    dest = "/tmp/ip_test_limit_noup.jpg"
+    dest = "#{@tmpdir}/ip_test_limit_noup.jpg"
     ImageProcessing::Pura
       .source(@jpeg_path)
       .resize_to_limit(200, 200)
@@ -50,7 +57,7 @@ class TestImageProcessingPure < Minitest::Test
   end
 
   def test_resize_to_fit
-    dest = "/tmp/ip_test_fit.jpg"
+    dest = "#{@tmpdir}/ip_test_fit.jpg"
     ImageProcessing::Pura
       .source(@jpeg_path)
       .resize_to_fit(50, 50)
@@ -62,7 +69,7 @@ class TestImageProcessingPure < Minitest::Test
   end
 
   def test_resize_to_fill
-    dest = "/tmp/ip_test_fill.jpg"
+    dest = "#{@tmpdir}/ip_test_fill.jpg"
     ImageProcessing::Pura
       .source(@jpeg_path)
       .resize_to_fill(60, 60)
@@ -74,7 +81,7 @@ class TestImageProcessingPure < Minitest::Test
   end
 
   def test_resize_and_pad
-    dest = "/tmp/ip_test_pad.jpg"
+    dest = "#{@tmpdir}/ip_test_pad.jpg"
     ImageProcessing::Pura
       .source(@jpeg_path)
       .resize_and_pad(120, 120)
@@ -86,7 +93,7 @@ class TestImageProcessingPure < Minitest::Test
   end
 
   def test_resize_to_cover
-    dest = "/tmp/ip_test_cover.jpg"
+    dest = "#{@tmpdir}/ip_test_cover.jpg"
     ImageProcessing::Pura
       .source(@jpeg_path)
       .resize_to_cover(60, 60)
@@ -98,7 +105,7 @@ class TestImageProcessingPure < Minitest::Test
   end
 
   def test_crop
-    dest = "/tmp/ip_test_crop.jpg"
+    dest = "#{@tmpdir}/ip_test_crop.jpg"
     ImageProcessing::Pura
       .source(@jpeg_path)
       .crop(10, 10, 50, 40)
@@ -110,7 +117,7 @@ class TestImageProcessingPure < Minitest::Test
   end
 
   def test_rotate_90
-    dest = "/tmp/ip_test_rot90.jpg"
+    dest = "#{@tmpdir}/ip_test_rot90.jpg"
     ImageProcessing::Pura
       .source(@jpeg_path)
       .rotate(90)
@@ -122,7 +129,7 @@ class TestImageProcessingPure < Minitest::Test
   end
 
   def test_rotate_180
-    dest = "/tmp/ip_test_rot180.jpg"
+    dest = "#{@tmpdir}/ip_test_rot180.jpg"
     ImageProcessing::Pura
       .source(@jpeg_path)
       .rotate(180)
@@ -134,7 +141,7 @@ class TestImageProcessingPure < Minitest::Test
   end
 
   def test_colourspace_bw
-    dest = "/tmp/ip_test_bw.jpg"
+    dest = "#{@tmpdir}/ip_test_bw.jpg"
     ImageProcessing::Pura
       .source(@jpeg_path)
       .colourspace("b-w")
@@ -149,7 +156,7 @@ class TestImageProcessingPure < Minitest::Test
   end
 
   def test_strip
-    dest = "/tmp/ip_test_strip.jpg"
+    dest = "#{@tmpdir}/ip_test_strip.jpg"
     ImageProcessing::Pura
       .source(@jpeg_path)
       .strip
@@ -160,7 +167,7 @@ class TestImageProcessingPure < Minitest::Test
   end
 
   def test_convert_jpeg_to_png
-    dest = "/tmp/ip_test_convert.png"
+    dest = "#{@tmpdir}/ip_test_convert.png"
     ImageProcessing::Pura
       .source(@jpeg_path)
       .resize_to_limit(50, 50)
@@ -172,7 +179,7 @@ class TestImageProcessingPure < Minitest::Test
   end
 
   def test_convert_png_to_jpeg
-    dest = "/tmp/ip_test_png2jpg.jpg"
+    dest = "#{@tmpdir}/ip_test_png2jpg.jpg"
     ImageProcessing::Pura
       .source(@png_path)
       .resize_to_limit(50, 50)
@@ -185,18 +192,18 @@ class TestImageProcessingPure < Minitest::Test
   def test_pipeline_branching
     pipeline = ImageProcessing::Pura.source(@jpeg_path)
 
-    pipeline.resize_to_limit(80, 80).call(destination: "/tmp/ip_branch_l.jpg")
-    pipeline.resize_to_limit(30, 30).call(destination: "/tmp/ip_branch_s.jpg")
+    pipeline.resize_to_limit(80, 80).call(destination: "#{@tmpdir}/ip_branch_l.jpg")
+    pipeline.resize_to_limit(30, 30).call(destination: "#{@tmpdir}/ip_branch_s.jpg")
 
-    rl = Pura::Jpeg.decode("/tmp/ip_branch_l.jpg")
-    rs = Pura::Jpeg.decode("/tmp/ip_branch_s.jpg")
+    rl = Pura::Jpeg.decode("#{@tmpdir}/ip_branch_l.jpg")
+    rs = Pura::Jpeg.decode("#{@tmpdir}/ip_branch_s.jpg")
 
     assert_equal 80, rl.width
     assert_equal 30, rs.width
   end
 
   def test_chained_operations
-    dest = "/tmp/ip_test_chain.jpg"
+    dest = "#{@tmpdir}/ip_test_chain.jpg"
     ImageProcessing::Pura
       .source(@jpeg_path)
       .resize_to_limit(50, 50)
@@ -217,7 +224,7 @@ class TestImageProcessingPure < Minitest::Test
   end
 
   def test_valid_image_invalid
-    File.write("/tmp/ip_test_invalid.txt", "not an image")
-    refute ImageProcessing::Pura.valid_image?("/tmp/ip_test_invalid.txt")
+    File.write("#{@tmpdir}/ip_test_invalid.txt", "not an image")
+    refute ImageProcessing::Pura.valid_image?("#{@tmpdir}/ip_test_invalid.txt")
   end
 end

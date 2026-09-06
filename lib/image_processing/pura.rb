@@ -10,10 +10,6 @@ module ImageProcessing
 
     def self.valid_image?(file)
       path = file.respond_to?(:path) ? file.path : file.to_s
-      data = File.binread(path, 8)
-      format = ::Pura::Image::Processor.detect_format(data)
-      return false unless format
-
       ::Pura::Image::Processor.load(path)
       true
     rescue StandardError
@@ -27,7 +23,9 @@ module ImageProcessing
         false
       end
 
-      def self.load_image(path_or_image, **_options)
+      def self.load_image(path_or_image, page: 0)
+        raise ArgumentError, "only the first image (page: 0) is supported" unless page.is_a?(Integer) && page.zero?
+
         if path_or_image.is_a?(::Pura::Image::Wrapper)
           path_or_image
         elsif path_or_image.is_a?(String)
@@ -43,45 +41,36 @@ module ImageProcessing
         ::Pura::Image::Processor.save(wrapper, destination.to_s, **options)
       end
 
-      def resize_to_limit(width, height, **_options)
-        w = image.width
-        h = image.height
+      def resize_to_limit(width, height)
+        image.resize_to_limit(width, height)
+      end
 
-        return image if w <= (width || w) && h <= (height || h)
-
-        width ||= w
-        height ||= h
+      def resize_to_fit(width, height)
         image.resize_to_fit(width, height)
       end
 
-      def resize_to_fit(width, height, **_options)
-        width ||= image.width
-        height ||= image.height
-        image.resize_to_fit(width, height)
-      end
-
-      def resize_to_fill(width, height, **_options)
+      def resize_to_fill(width, height)
         image.resize_to_fill(width, height)
       end
 
-      def resize_and_pad(width, height, background: nil, **_options)
+      def resize_and_pad(width, height, background: nil)
         bg = background || [0, 0, 0]
         image.resize_and_pad(width, height, background: bg)
       end
 
-      def resize_to_cover(width, height, **_options)
+      def resize_to_cover(width, height)
         image.resize_to_cover(width, height)
       end
 
-      def crop(left, top, width, height, **_options)
+      def crop(left, top, width, height)
         image.crop(left, top, width, height)
       end
 
-      def rotate(degrees, **_options)
+      def rotate(degrees)
         image.rotate(degrees)
       end
 
-      def colourspace(space, **_options)
+      def colourspace(space)
         if %w[b-w grey16].include?(space.to_s)
           image.grayscale
         else
@@ -89,11 +78,11 @@ module ImageProcessing
         end
       end
 
-      def strip(**_options)
+      def strip
         image.strip
       end
 
-      def convert(format, **_options)
+      def convert(format)
         # Store desired format for save_image
         @format = format.to_s.delete(".")
         image
