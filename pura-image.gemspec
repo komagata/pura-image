@@ -20,13 +20,13 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir["lib/**/*.rb"] + ["test/fixtures/test_64x64.jpg"] + ["pura-image.gemspec", "Gemfile", "Rakefile", "README.md", "LICENSE"]
 
-  spec.add_dependency "pura-jpeg", "~> 0.1"
-  spec.add_dependency "pura-png", "~> 0.1"
-  spec.add_dependency "pura-bmp", "~> 0.1"
-  spec.add_dependency "pura-gif", "~> 0.1"
-  spec.add_dependency "pura-tiff", "~> 0.1"
-  spec.add_dependency "pura-ico", "~> 0.1"
-  spec.add_dependency "pura-webp", "~> 0.2"
+  spec.add_dependency "pura-jpeg", "~> 0.1", ">= 0.1.1"
+  spec.add_dependency "pura-png", "~> 0.1", ">= 0.1.1"
+  spec.add_dependency "pura-bmp", "~> 0.1", ">= 0.1.1"
+  spec.add_dependency "pura-gif", "~> 0.1", ">= 0.1.1"
+  spec.add_dependency "pura-tiff", "~> 0.1", ">= 0.1.1"
+  spec.add_dependency "pura-ico", "~> 0.1", ">= 0.1.1"
+  spec.add_dependency "pura-webp", "~> 0.2", ">= 0.2.1"
   spec.add_dependency "pura-processing", "~> 0.1"
   spec.add_development_dependency "minitest", "~> 5.0"
   spec.add_development_dependency "rake", "~> 13.0"
